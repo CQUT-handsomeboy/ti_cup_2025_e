@@ -23,7 +23,8 @@
 // the difference is added or subtracted based on this speed.
 
 #define BASE_CTRL 550
-#define INC_CTRL	200
+#define BASE_SPEED 550
+#define INC_SPEED	200
 
 void usart0_send_bytes(unsigned char *buf, int len)
 {
@@ -104,14 +105,18 @@ void line_patrol()
 		gray_bias = gray_calculate_bias(sensor_data);
 		// Turn right and the left wheel will go faster
 		// Be positive if you need to turn right
-		PID_calculate(&left_wheel_pid,
+
+		// Note that both should be 
+		// positive or negative numbers
+		float inc_l = PID_calculate(&left_wheel_pid,
 			l_encoder_speed,
-			BASE_CTRL + gray_bias * INC_CTRL
+			BASE_SPEED + gray_bias * INC_SPEED
 		);
-		PID_calculate(&right_wheel_pid,
+		float inc_r = PID_calculate(&right_wheel_pid,
 			r_encoder_speed,
-			BASE_CTRL - gray_bias * INC_CTRL
+			BASE_SPEED - gray_bias * INC_SPEED
 		);
+		Motor_Pwm(BASE_CTRL + inc_l, BASE_CTRL + inc_r);
 		//		sprintf(s1,"%06.2f",gray_bias);
 		//		LCD_clear_L(1, 1);
 		//		display_6_8_string(1,1,s1);
