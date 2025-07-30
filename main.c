@@ -18,6 +18,13 @@
 #include "Delay.h"
 #include "lightandsound.h"
 
+// BASE_CTRL represents the base speed. 
+// In order to achieve a turn, 
+// the difference is added or subtracted based on this speed.
+
+#define BASE_CTRL 550
+#define INC_CTRL	200
+
 void usart0_send_bytes(unsigned char *buf, int len)
 {
 	while (len--)
@@ -41,7 +48,6 @@ uint8_t sensor_data = 255;
 extern float gray_calculate_bias(uint8_t sensor_data);
 extern float PID_calculate(PID *pid, float input, float target);
 extern float PID_clear(PID *pid);
-float base_ctrl_value = 550;
 
 // The only functions we need are two: 
 // a tracking function, where the tracking module stops 
@@ -49,27 +55,18 @@ float base_ctrl_value = 550;
 // and a quarter-angle turn function, 
 // where the angle is controlled by an encoder.
 
-typedef enum
-{
-	LINE_PATROL,
-	QUARTER_TURN
-} MODE;
-
-MODE mode = 0xFF;
-
-float speed_difference_ctrl_value;
-float gray_bias;
-float line_patrol_ctrl_value;
-float line_patrol_weight;
-float left_ctrl_value,right_ctrl_value;
-extern PID line_patrol_pid;
+float speed_difference_ctrl_value,
+		gray_bias,
+		line_patrol_ctrl_value,
+		line_patrol_weight,
+		left_ctrl_value,
+		right_ctrl_value;
 
 typedef enum
 {
 	LEFT,
 	RIGHT
 } MOTOR_DIRECTION;
-
 // This function controls the motor 
 // to rotate a certain angle by combining the encoder readings. 
 // It only needs to measure the number of pulses 
@@ -83,30 +80,50 @@ void revolve_by_encoder(MOTOR_DIRECTION motor_direction, int delta_decoder)
 		start = l_encoder_l_count;
 		while (l_encoder_l_count - start < delta_decoder)
 		{
-			Motor_Pwm(base_ctrl_value, 0);
+			Motor_Pwm(BASE_CTRL, 0);
 		}
 		break;
 	case RIGHT:
 		start = r_encoder_l_count;
 		while (r_encoder_l_count - start < delta_decoder)
 		{
-			Motor_Pwm(0, base_ctrl_value);
+			Motor_Pwm(0, BASE_CTRL);
 		}
 		break;
 	}
 	Motor_Pwm(0, 0);
 }
 
+char s1[16];
+extern PID left_wheel_pid,right_wheel_pid;
 void line_patrol()
 {
-	mode = LINE_PATROL;
-	PID_clear(&line_patrol_pid);
 	while (1) 
 	{
 		sensor_data = gw_gray_serial_read();
 		gray_bias = gray_calculate_bias(sensor_data);
+		// Turn right and the left wheel will go faster
+		// Be positive if you need to turn right
+		PID_calculate(&left_wheel_pid,
+			l_encoder_speed,
+			BASE_CTRL + gray_bias * INC_CTRL
+		);
+		PID_calculate(&right_wheel_pid,
+			r_encoder_speed,
+			BASE_CTRL - gray_bias * INC_CTRL
+		);
+		//		sprintf(s1,"%06.2f",gray_bias);
+		//		LCD_clear_L(1, 1);
+		//		display_6_8_string(1,1,s1);
+		delay_ms(100);
 	}
 }
+
+extern void float_items_screen_show(
+		char* title,
+		char** item_titles,
+		float* item_value
+);
 
 int main(void)
 {
@@ -140,8 +157,11 @@ int main(void)
 					   `=---='
 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	*/
-
-
+	while(1)
+	{
+		line_patrol();
+		delay_ms(100);
+	}
 #if 0 
 // Mode Switching Reference
 	while (1) {

@@ -3,6 +3,8 @@
 */
 
 #include "global.h"
+#define I_MAX 300
+#define MAX 500
 
 float PID_calculate(PID * pid,float input,float target)
 {
@@ -25,14 +27,26 @@ float PID_clear(PID * pid)
 	pid->prev_error = 0;
 }
 
-PID line_patrol_pid = {
+PID left_wheel_pid = {
 	.Kp = 4,
+	.Ki = 0,
+	.Kd = 0,
+	.prev_error = 0,
+	.I = 0,
+	.I_max = I_MAX,
+	.I_min = -I_MAX,
+	.max = MAX,
+	.min = -MAX,
+};
+
+PID right_wheel_pid = {
+	.Kp = 0,
 	.Ki = 2,
 	.Kd = 0.9,
 	.prev_error = 0,
 	.I = 0,
-	.I_max = 300,
-	.I_min = -300,
-	.max = 500,
-	.min = -500,
+	.I_max = I_MAX,
+	.I_min = -I_MAX,
+	.max = MAX,
+	.min = -MAX,
 };
