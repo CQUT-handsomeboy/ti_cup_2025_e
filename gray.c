@@ -6,119 +6,53 @@
 
 float gray_calculate_bias(uint8_t sensor_data)
 {
-	static float error = 0;
+	static float prevError = 0;
+	float error;
 	switch(sensor_data)
 	{
-		case 0b11111111:
+		// 0
+		case 0b1111:
+			error = prevError;
 			break;
-		case 0b01111111: 
-			error = -3.5;
-			break;
-		case 0b10111111:
-			error = -2.5;
-			break;
-		case 0b11011111:
-			error = -1.5;
-			break;
-		case 0b11101111:
-			error = -0.5;
-			break;
-		case 0b11110111:
-			error = 0.5;
-			break;
-		case 0b11111011:
-			error = 1.5;
-			break;
-		case 0b11111101:
-			error = 2.5;
-			break;
-		case 0b11111110:
-			error = 3.5;
-			break;
-		case 0b00111111:
+		// 1
+		case 0b0111:
 			error = -3;
 			break;
-		case 0b10011111:
-			error = -2;
-			break;
-		case 0b11001111:
+		case 0b1011:
 			error = -1;
 			break;
-		case 0b11100111:
-			error = 0;
-			break;
-		case 0b11110011:
+		case 0b1101:
 			error = 1;
 			break;
-		case 0b11111001:
-			error = 2;
-			break;
-		case 0b11111100:
+		case 0b1110:
 			error = 3;
 			break;
-		case 0b00011111:
-			error = -2.5;
-			break;
-		case 0b10001111:
-			error = -1.5;
-			break;
-		case 0b11000111:
-			error = -0.5;
-			break;
-		case 0b11100011:
-			error = 0.5;
-			break;
-		case 0b11110001:
-			error = 1.5;
-			break;
-		case 0b11111000:
-			error = 2.5;
-			break;
-		case 0b00001111:
+		// 2
+		case 0b0011:
 			error = -2;
 			break;
-		case 0b10000111:
-			error = -1;
-			break;
-		case 0b11000011:
+		case 0b1001:
 			error = 0;
 			break;
-		case 0b11100001:
-			error = 1;
-			break;
-		case 0b11110000:
+		case 0b1100:
 			error = 2;
 			break;
-		case 0b00000111:
-			error = -1.5;
-			break;
-		case 0b10000011:
-			error = -0.5;
-			break;
-		case 0b11000001:
-			error = 0.5;
-			break;
-		case 0b11100000:
-			error = 1.5;
-			break;
-		case 0b00000011:
+		// 3
+		case 0b0001:
 			error = -1;
 			break;
-		case 0b10000001:
-			error = 0;
-			break;
-		case 0b11000000:
+		case 0b1000:
 			error = 1;
 			break;
-		case 0b00000001:
-			error = -0.5;
-			break;
-		case 0b10000000:
-			error = 0.5;
-			break;
-		case 0b00000000:
+		// 4
+		case 0b0000:
 			error = 0;
 			break;
+		// fuck
+		default:
+			error = prevError;
+			break;
 	}
+	prevError = error;
 	return error;
 }

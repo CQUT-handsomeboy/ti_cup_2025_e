@@ -116,9 +116,13 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
 
     DL_GPIO_initDigitalOutput(MPU6050_SCL_IOMUX);
 
-    DL_GPIO_initDigitalInput(GRAY_DAT_IOMUX);
+    DL_GPIO_initDigitalInput(GRAY_X1_IOMUX);
 
-    DL_GPIO_initDigitalOutput(GRAY_CLK_IOMUX);
+    DL_GPIO_initDigitalInput(GRAY_X2_IOMUX);
+
+    DL_GPIO_initDigitalInput(GRAY_X3_IOMUX);
+
+    DL_GPIO_initDigitalInput(GRAY_X4_IOMUX);
 
     DL_GPIO_initDigitalOutput(lightandsound_beep_IOMUX);
 
@@ -140,7 +144,6 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
 		USER_GPIO_PWM_R1_PIN |
 		MPU6050_SDA_PIN |
 		MPU6050_SCL_PIN |
-		GRAY_CLK_PIN |
 		lightandsound_beep_PIN |
 		lightandsound_led_PIN);
     DL_GPIO_enableOutput(GPIOA, USER_GPIO_PWM_L0_PIN |
@@ -149,7 +152,6 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
 		USER_GPIO_PWM_R1_PIN |
 		MPU6050_SDA_PIN |
 		MPU6050_SCL_PIN |
-		GRAY_CLK_PIN |
 		lightandsound_beep_PIN |
 		lightandsound_led_PIN);
     DL_GPIO_setLowerPinsPolarity(GPIOA, DL_GPIO_PIN_6_EDGE_RISE_FALL |
@@ -328,8 +330,6 @@ SYSCONFIG_WEAK void SYSCFG_DL_UART_0_init(void)
     /* Configure Interrupts */
     DL_UART_Main_enableInterrupt(UART_0_INST,
                                  DL_UART_MAIN_INTERRUPT_RX);
-    /* Setting the Interrupt Priority */
-    NVIC_SetPriority(UART_0_INST_INT_IRQN, 2);
 
 
     DL_UART_Main_enable(UART_0_INST);

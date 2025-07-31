@@ -186,12 +186,18 @@ extern "C" {
 /* Port definition for Pin Group GRAY */
 #define GRAY_PORT                                                        (GPIOA)
 
-/* Defines for DAT: GPIOA.2 with pinCMx 3 on package pin 6 */
-#define GRAY_DAT_PIN                                             (DL_GPIO_PIN_2)
-#define GRAY_DAT_IOMUX                                            (IOMUX_PINCM3)
-/* Defines for CLK: GPIOA.3 with pinCMx 4 on package pin 7 */
-#define GRAY_CLK_PIN                                             (DL_GPIO_PIN_3)
-#define GRAY_CLK_IOMUX                                            (IOMUX_PINCM4)
+/* Defines for X1: GPIOA.2 with pinCMx 3 on package pin 6 */
+#define GRAY_X1_PIN                                              (DL_GPIO_PIN_2)
+#define GRAY_X1_IOMUX                                             (IOMUX_PINCM3)
+/* Defines for X2: GPIOA.3 with pinCMx 4 on package pin 7 */
+#define GRAY_X2_PIN                                              (DL_GPIO_PIN_3)
+#define GRAY_X2_IOMUX                                             (IOMUX_PINCM4)
+/* Defines for X3: GPIOA.8 with pinCMx 9 on package pin 12 */
+#define GRAY_X3_PIN                                              (DL_GPIO_PIN_8)
+#define GRAY_X3_IOMUX                                             (IOMUX_PINCM9)
+/* Defines for X4: GPIOA.9 with pinCMx 10 on package pin 13 */
+#define GRAY_X4_PIN                                              (DL_GPIO_PIN_9)
+#define GRAY_X4_IOMUX                                            (IOMUX_PINCM10)
 /* Port definition for Pin Group lightandsound */
 #define lightandsound_PORT                                               (GPIOA)
 
